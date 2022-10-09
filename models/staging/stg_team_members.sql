@@ -1,0 +1,26 @@
+select
+first_name
+,last_name
+,full_name
+,email_address
+,phone_number
+,country
+,biztory_branch
+,role
+,member_type
+,employment_approach
+,start_date
+,company_car
+,company_laptop
+,company_phone
+,end_date
+,highest_diploma
+,discipline
+,birthday
+,team
+,reports_to
+,approver
+,status
+,cronos_login
+,title
+from {{ source('datajam', 'team_members') }}

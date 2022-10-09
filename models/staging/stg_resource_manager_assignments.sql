@@ -1,0 +1,21 @@
+select
+id
+,assignable_id
+,all_day_assignment
+,starts_at
+,_fivetran_batch
+,hours_per_day
+,created_at
+,bill_rate
+,_fivetran_index
+,updated_at
+,user_id
+,bill_rate_id
+,allocation_mode
+,ends_at
+,_fivetran_synced
+,status_option_id
+,description
+,repetition_id
+,percent
+from {{ source('datajam', 'resource_manager_assignments') }}

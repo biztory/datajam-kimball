@@ -1,0 +1,21 @@
+select
+_row
+,modified
+,_fivetran_batch
+,comments
+,duration_days_
+,language_requirements
+,status_of_request
+,request_id
+,hub_spot_line_item
+,work_pattern
+,created
+,resource_booked
+,modified_by
+,start_date
+,_fivetran_index
+,slack_planning_channel_message_ts
+,account_manager_requesting
+,comments_add_information
+,_fivetran_synced
+from {{ source('datajam', 'smartsheet_request_form_responses') }}
