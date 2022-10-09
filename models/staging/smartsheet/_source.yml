@@ -6,5 +6,5 @@ sources:
   database: biztory_demo
   schema: datajam_2022
   tables:
-  - name: operations_resource_request_form
+  - name: smartsheet_request_form_responses
     description: What projects have been assigned

@@ -27,4 +27,4 @@ id
 ,guid
 ,phase_name
 ,_fivetran_synced
-from  {{ source('resource_manager', 'projects_phases') }}
+from  {{ source('resource_manager', 'resource_manager_project_phases') }}
