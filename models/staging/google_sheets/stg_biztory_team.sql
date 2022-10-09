@@ -23,4 +23,4 @@ first_name
 ,status
 ,cronos_login
 ,title
-from {{ source('datajam', 'team_members') }}
+from {{ source('google_sheets', 'team_members') }}

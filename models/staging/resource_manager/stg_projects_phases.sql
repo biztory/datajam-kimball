@@ -27,4 +27,4 @@ id
 ,guid
 ,phase_name
 ,_fivetran_synced
-from {{ source('datajam', 'resource_manager_project_phases') }}
+from  {{ source('resource_manager', 'projects_phases') }}

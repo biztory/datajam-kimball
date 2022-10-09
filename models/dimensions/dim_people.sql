@@ -1,12 +1,12 @@
 -- Contains all attributes of people involved in deals
 with hubspot as (
-    select * from {{ref('stg_hubspot_owner')}}
+    select * from {{ref('stg_owner')}}
 ),
 biztory_team as (
     select * from {{ref('stg_team_members')}}
 ),
 rm_users as (
-    select * from {{ref('stg_resource_manager_users')}}
+    select * from {{ref('stg_users')}}
 ),
 final as (
     select * from biztory_team bt

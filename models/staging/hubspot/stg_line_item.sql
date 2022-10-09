@@ -29,4 +29,4 @@ id
 ,property_delivered_days
 ,property_product_hours
 ,property_hours_used
-from {{ source('datajam', 'hubspot_line_item') }}
+from {{ source('hubspot', 'hubspot_line_item') }}

@@ -18,4 +18,4 @@ id
 ,description
 ,repetition_id
 ,percent
-from {{ source('datajam', 'resource_manager_assignments') }}
+from {{ source('resource_manager', 'assignments') }}

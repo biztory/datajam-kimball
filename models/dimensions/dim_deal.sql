@@ -1,5 +1,5 @@
 with deal as (
-    select * from  {{ref('stg_hubspot_deal')}}
+    select * from  {{ref('stg_deal')}}
 ),
 final as (
     select

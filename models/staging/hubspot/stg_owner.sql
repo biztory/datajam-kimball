@@ -11,4 +11,4 @@ owner_id
 ,active_user_id
 ,is_active
 ,user_id_including_inactive
-from {{ source('datajam', 'hubspot_owner') }}
+from {{ source('hubspot', 'hubspot_owner') }}

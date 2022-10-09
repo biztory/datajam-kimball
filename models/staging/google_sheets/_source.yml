@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+- name: google_sheets
+  description: Data entered on Google Sheets
+  database: biztory_demo
+  schema: datajam_2022
+  tables:
+  - name: team_members
+    description: List of employees at Biztory

@@ -27,7 +27,7 @@ with company as (
     ,property_hs_parent_company_id -- see if we have a dimension related to this, else remove
     ,property_hs_merged_object_ids
     ,property_hs_object_id  -- double check its not needed as a key in the fact & remove
-from {{ref('stg_hubspot_company')}}
+from {{ref('stg_company')}}
 ),
 final as (
     select * from company

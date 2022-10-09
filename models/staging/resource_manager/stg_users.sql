@@ -34,4 +34,4 @@ id
 ,termination_date
 ,employee_number
 ,deleted_at
-from {{ source('datajam', 'resource_manager_users') }}
+from   {{ source('resource_manager', 'users') }}

@@ -27,4 +27,4 @@ id
 ,property_hs_parent_company_id
 ,property_hs_merged_object_ids
 ,property_hs_object_id
-from {{ source('datajam', 'hubspot_company') }}
+from {{ source('hubspot', 'hubspot_company') }}

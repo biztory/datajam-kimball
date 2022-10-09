@@ -18,4 +18,4 @@ _row
 ,account_manager_requesting
 ,comments_add_information
 ,_fivetran_synced
-from {{ source('datajam', 'smartsheet_request_form_responses') }}
+from {{ source('smartsheet', 'request_form_responses') }}

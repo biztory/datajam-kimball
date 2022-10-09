@@ -21,4 +21,4 @@ deal_id
 ,deal_pipeline_stage_id -- check if this is in fact, if not, move to fact
 ,property_hs_all_owner_ids
 ,property_hs_is_closed_won
-from {{ source('datajam', 'hubspot_deal') }}
+from {{ source('hubspot', 'hubspot_deal') }}
