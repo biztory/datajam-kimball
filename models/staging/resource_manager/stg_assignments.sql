@@ -18,4 +18,4 @@ id
 ,description
 ,repetition_id
 ,percent
-from {{ source('resource_manager', 'assignments') }}
+from {{ source('resource_manager', 'resource_manager_assignments') }}

@@ -1,5 +1,5 @@
 with cal as (
-    SELECT * from {{ref('stg_calendar')}} 
+    SELECT * from {{ref('calendar')}} 
 ),
 
 team as (
@@ -18,17 +18,17 @@ planning_calendar as (
 ),
 
 rm_mgr_assignment as (
-    select * from {{ref('stg_resource_manager_assignments')}}
+    select * from {{ref('stg_assignments')}}
 ),
 
 rm_users as (
-    select * from {{ref('stg_resource_manager_users')}}
+    select * from {{ref('stg_users')}}
 ),
 
 rm_pp as (
     select 
     *
-    from {{ref('stg_resource_manager_project_phases')}}
+    from {{ref('stg_project_phases')}}
 ),
 
 
@@ -53,16 +53,16 @@ FROM planning_calendar
 ),
 
 hubspot_deal as (
-    select * from {{ref('stg_hubspot_deal')}}
+    select * from {{ref('stg_deal')}}
     --deal_id as planned_deal_id
-    --from {{ref('stg_hubspot_deal')}}
+    --from {{ref('stg_deal')}}
 ), -- join on deal id
 
 hubspot_deal_company as (
-    select * from {{ref('stg_hubspot_deal_company')}}
+    select * from {{ref('stg_deal_company')}}
     --deal_id,
     --company_id as planned_company_id
-    --from {{ref('stg_hubspot_deal_company')}}
+    --from {{ref('stg_deal_company')}}
 ), -- join on deal id
 
 hubspot_li as (
@@ -72,7 +72,7 @@ hubspot_li as (
     property_name,
     min(property_price) as bill_rate,
     ((SUM(property_quantity * COALESCE(property_product_hours,1)))/8) AS line_item_num_days
-    from {{ref('stg_hubspot_line_item')}}
+    from {{ref('stg_line_item')}}
     where (property_sub_category = 'Consulting' OR property_sub_category = 'Training')
     group by 1,2,3
 ),
