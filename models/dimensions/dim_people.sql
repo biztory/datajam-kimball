@@ -25,6 +25,8 @@ final as (
     bt.discipline as member_discipline,
     bt.birthday as member_birthday,
     bt.approver as member_approver,
+    bt.role as member_role,
+    bt.member_type as member_type,
     rm.LAST_LOGIN_TIME as rm_last_login_time,
     rm.has_login as rm_has_login,
     rm.account_owner as rm_account_owner,
