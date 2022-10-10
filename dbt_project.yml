@@ -37,7 +37,7 @@ models:
     example:
       +materialized: view
 seeds:
-  dataham_kimball:
+  datajam_kimball:
     calendar:
       +column_types:
         date: timestamp
