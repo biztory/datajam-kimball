@@ -36,22 +36,6 @@ models:
     # Config indicated by + and applies to all files under models/example/
     example:
       +materialized: view
-<<<<<<< HEAD
-
-seeds:        
-  datajam_kimball:  
-    seeds:
-      calendar:        
-        +column_types:
-          date: TIMESTAMP_NTZ(9)
-          YEAR: int
-          MONTH: int
-          MONTH_NAME: text
-          DAY: int
-          DAY_OF_WEEK: int
-          WEEK_OF_YEAR: int
-          DAY_OF_YEAR: int
-=======
 seeds:
   dataham_kimball:
     calendar:
@@ -64,4 +48,3 @@ seeds:
         day_of_week: int
         week_of_year: int
         day_of_year: int
->>>>>>> e36eeab95c79426ab39ff90df0484d8db38523de
