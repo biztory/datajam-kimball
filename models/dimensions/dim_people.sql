@@ -11,7 +11,7 @@ rm_users as (
 final as (
     select    
     bt.email_address as member_email,
-    bt.full_name as member,
+    bt.full_name as member_name,
     bt.country as member_country,
     bt.team as member_team,
     bt.role as member_role, 
@@ -25,7 +25,6 @@ final as (
     bt.discipline as member_discipline,
     bt.birthday as member_birthday,
     bt.approver as member_approver,
-    bt.role as member_role,
     bt.member_type as member_type,
     rm.LAST_LOGIN_TIME as rm_last_login_time,
     rm.has_login as rm_has_login,

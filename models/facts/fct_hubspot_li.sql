@@ -90,7 +90,7 @@ dim_deal as (
 ),
 
 dim_people as (
-    select email_address
+    select member_email
     from {{ref('dim_people')}}
 ),
 
@@ -103,7 +103,10 @@ final as (
     hli.bill_rate,
     hli.line_item_num_days,
     dd.deal_id as planned_deal_id,
-    dc.id as planned_company_id
+    dc.id as planned_company_id,
+    -- below to be split into dimension
+    pc.engagement_status,
+    pc.planned
     -- add deal owner id
     -- add deal team id
     FROM planning_clean pc
