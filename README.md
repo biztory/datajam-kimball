@@ -1,10 +1,15 @@
-Welcome to your new dbt project!
+Welcome to Biztory's example dataset to be used with a free Snowflake and DBT Trial.
+Ideally, used alongside Fivetran we've put this together as a demo to show you how easy it is to combine your data from several sources, modelling them into a Kimball data warehouse and produce an end result view to be published in Tableau!
 
 ### Using the starter project
 
-Try running the following commands:
-- dbt run
-- dbt test
+- Signup for a free Snowflake account: https://signup.snowflake.com/
+- Import the data using the SQL script found [here](https://drive.google.com/file/d/10LL5xrng081aRnZEz4OBmQyLIXWDXRQO/view?usp=sharing)
+- Create a free dbt account: https://cloud.getdbt.com/signup/
+- Complete project setup and copy and paste scripts found in this repo into DBT
+- When complete, do dbt run to run all the scripts
+- Your data is good to go in Snowflake and ready to use in Tableau
+- You then have a free trial of Snowflake, DBT and some dummy data to play around with
 
 
 ### Resources:
