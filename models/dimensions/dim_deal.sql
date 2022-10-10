@@ -2,7 +2,7 @@ with deal as (
     select * from  {{ref('stg_deal')}}
 ),
 fact as (
-    select * from {{ref('fact_hubspot_li')}}
+    select * from {{ref('fct_hubspot_li')}}
 ),
 final as (
     select
