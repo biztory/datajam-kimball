@@ -13,7 +13,7 @@ fact as (
 ),
 final as (
     select    
-    fact.email_address as member_email,
+    bt.email_address as member_email,
     bt.full_name as member,
     bt.country as member_country,
     bt.team as member_team,
@@ -36,6 +36,5 @@ final as (
     from biztory_team bt
     LEFT JOIN hubspot h ON lower(split(bt.email_address, '@')[0]::string) = lower(split(h.email, '@')[0]::string)
     LEFT JOIN rm_users rm on lower(split(bt.email_address, '@')[0]::string) = lower(split(rm.email, '@')[0]::string)
-    LEFT JOIN fact on lower(split(bt.email_address, '@')[0]::string) = lower(split(fact.consultant_email, '@')[0]::string)
 )
 select * from final

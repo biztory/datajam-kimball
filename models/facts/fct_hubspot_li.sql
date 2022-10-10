@@ -77,6 +77,23 @@ hubspot_li as (
     group by 1,2,3
 ),
 
+dim_company as (
+    select 
+    id
+    from {{ref('dim_company')}}
+),
+
+dim_deal as (
+    select
+    deal_id
+    from {{ref('dim_deal')}}
+),
+
+dim_people as (
+    select email_address
+    from {{ref('dim_people')}}
+),
+
 final as (
     select
     pc.consultant_email, 
@@ -85,15 +102,21 @@ final as (
     pc.project_code,
     hli.bill_rate,
     hli.line_item_num_days,
-    hd.deal_id as planned_deal_id,
-    hdc.company_id as planned_company_id
+    dd.deal_id as planned_deal_id,
+    dc.id as planned_company_id
     -- add deal owner id
     -- add deal team id
     FROM planning_clean pc
     LEFT JOIN hubspot_li hli on hli.deal_id = pc.hubspot_deal_id
     AND hli.property_name = pc.hubspot_line_item
+    -- get our deal id & join to our dimension
     LEFT JOIN hubspot_deal hd on hd.deal_id = pc.hubspot_deal_id
+    LEFT JOIN dim_deal dd on dd.deal_id = hd.deal_id
+     -- get our company id & join to our dimension
     LEFT JOIN hubspot_deal_company hdc on hdc.deal_id = pc.hubspot_deal_id
+    LEFT JOIN dim_company dc on dc.id = hdc.company_id
+    -- get our people id & join to our dimension
+    LEFT JOIN dim_people dp on lower(split(pc.consultant_email, '@')[0]::string) = lower(split(dp.member_email, '@')[0]::string)
 )
 
 select * from final

@@ -6,7 +6,7 @@ fact as (
 ),
 final as (
     select
-    fact.planned_deal_id
+    deal.deal_id
     ,deal.is_deleted
     ,deal._fivetran_synced
     ,deal.property_deal_currency_code
@@ -21,6 +21,5 @@ final as (
     ,deal.property_createdate
     ,deal.property_hs_is_closed_won
     from deal
-    left join fact on fact.planned_deal_id = deal.deal_id
 )
 select * from final

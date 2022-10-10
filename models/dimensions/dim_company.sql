@@ -6,7 +6,7 @@ fact as (
 ),
 final as (
     select 
-    fact.id
+    company.id
     ,company.is_deleted
     ,company._fivetran_synced
     ,company.property_state
@@ -34,6 +34,5 @@ final as (
     ,company.property_hs_merged_object_ids
     ,company.property_hs_object_id
     from company
-    left join fact on fact.company_id = company.id
 )
 select * from final
