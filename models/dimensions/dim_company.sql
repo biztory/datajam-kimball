@@ -1,35 +1,39 @@
 with company as (
-    select
-    id
-    ,is_deleted
-    ,_fivetran_synced
-    ,property_state
-    ,property_name
-    ,property_hs_lastmodifieddate
-    ,property_timezone
-    ,property_city
-    ,property_hubspot_owner_assigneddate
-    ,property_address
-    ,property_address_2
-    ,property_hs_user_ids_of_all_owners
-    ,property_hs_updated_by_user_id -- replace this with name of last updated
-    ,property_biztory_shortcode
-    ,property_hs_created_by_user_id  -- replace this with name of last created
-    ,property_hubspot_team_id -- replace this with team assignment if exsists?
-    ,property_industry
-    ,property_zip
-    ,property_web_technologies
-    ,property_createdate
-    ,property_country
-    ,property_hs_all_team_ids
-    ,property_hubspot_owner_id -- replace this with name of owner
-    ,property_numberofemployees
-    ,property_hs_parent_company_id -- see if we have a dimension related to this, else remove
-    ,property_hs_merged_object_ids
-    ,property_hs_object_id  -- double check its not needed as a key in the fact & remove
-from {{ref('stg_company')}}
+    select * from {{ref('stg_company')}}
+),
+fact as (
+    select * from {{ref('fct_hubspot_li')}}
 ),
 final as (
-    select * from company
+    select 
+    fact.id
+    ,company.is_deleted
+    ,company._fivetran_synced
+    ,company.property_state
+    ,company.property_name
+    ,company.property_hs_lastmodifieddate
+    ,company.property_timezone
+    ,company.property_city
+    ,company.property_hubspot_owner_assigneddate
+    ,company.property_address
+    ,company.property_address_2
+    ,company.property_hs_user_ids_of_all_owners
+    ,company.property_hs_updated_by_user_id -- replace this with name of last updated
+    ,company.property_biztory_shortcode
+    ,company.property_hs_created_by_user_id  -- replace this with name of last created
+    ,company.property_hubspot_team_id -- replace this with team assignment if exsists?
+    ,company.property_industry
+    ,company.property_zip
+    ,company.property_web_technologies
+    ,company.property_createdate
+    ,company.property_country
+    ,company.property_hs_all_team_ids
+    ,company.property_hubspot_owner_id -- replace this with name of owner
+    ,company.property_numberofemployees
+    ,company.property_hs_parent_company_id -- see if we have a dimension related to this, else remove
+    ,company.property_hs_merged_object_ids
+    ,company.property_hs_object_id
+    from company
+    left join fact on fact.company_id = company.id
 )
 select * from final
