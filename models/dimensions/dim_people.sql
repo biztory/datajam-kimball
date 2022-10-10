@@ -8,9 +8,6 @@ biztory_team as (
 rm_users as (
     select * from {{ref('stg_users')}}
 ),
-fact as (
-    select email_address from {{ref('fct_hubspot_li')}}
-),
 final as (
     select    
     bt.email_address as member_email,

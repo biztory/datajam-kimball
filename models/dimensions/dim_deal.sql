@@ -1,9 +1,6 @@
 with deal as (
     select * from  {{ref('stg_deal')}}
 ),
-fact as (
-    select * from {{ref('fct_hubspot_li')}}
-),
 final as (
     select
     deal.deal_id

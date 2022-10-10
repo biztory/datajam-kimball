@@ -1,9 +1,6 @@
 with company as (
     select * from {{ref('stg_company')}}
 ),
-fact as (
-    select * from {{ref('fct_hubspot_li')}}
-),
 final as (
     select 
     company.id
