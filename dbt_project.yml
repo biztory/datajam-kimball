@@ -36,3 +36,17 @@ models:
     # Config indicated by + and applies to all files under models/example/
     example:
       +materialized: view
+
+seeds:        
+  datajam_kimball:  
+    seeds:
+      calendar:        
+        +column_types:
+          date: TIMESTAMP_NTZ(9)
+          YEAR: int
+          MONTH: int
+          MONTH_NAME: text
+          DAY: int
+          DAY_OF_WEEK: int
+          WEEK_OF_YEAR: int
+          DAY_OF_YEAR: int
