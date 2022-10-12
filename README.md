@@ -6,7 +6,8 @@ Ideally, used alongside Fivetran we've put this together as a demo to show you h
 - Signup for a free Snowflake account: https://signup.snowflake.com/
 - Import the data using the SQL script found [here](https://drive.google.com/file/d/10LL5xrng081aRnZEz4OBmQyLIXWDXRQO/view?usp=sharing)
 - Create a free dbt account: https://cloud.getdbt.com/signup/
-- Complete project setup and copy and paste scripts found in this repo into DBT
+- Download this repo and upload into a new git repository
+- Link your DBT user with your git account
 - When complete, do dbt run to run all the scripts
 - Your data is good to go in Snowflake and ready to use in Tableau
 - You then have a free trial of Snowflake, DBT and some dummy data to play around with
