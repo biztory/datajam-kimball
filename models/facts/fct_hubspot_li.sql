@@ -34,22 +34,23 @@ rm_pp as (
 
 planning_clean as (
     SELECT 
-	rm_users.email AS consultant_email,
-	rm_users.display_name AS consultant,
-	planning_calendar.date AS engagement_date,
-	rm_pp.name AS planned,
-	rm_pp.project_code,
-	rm_pp.project_state AS engagement_status,
-	SPLIT(rm_pp.project_code, ' | ')[0]::STRING AS hubspot_deal_id,
-	SPLIT(rm_pp.project_code, ' | ')[1]::STRING AS hubspot_line_item,
-	COALESCE(rm_mgr_assignment.hours_per_day, 8) AS hours,
-	rm_mgr_assignment.description AS rm_assignment_description
-FROM planning_calendar
-    JOIN rm_users ON LOWER(SPLIT(rm_users.email, '@')[0]::string) = LOWER(SPLIT(planning_calendar.email_address, '@')[0]::string) 
-    LEFT JOIN  rm_mgr_assignment
-        ON planning_calendar.date >= rm_mgr_assignment.starts_at AND planning_calendar.date <= rm_mgr_assignment.ends_at
-        AND rm_mgr_assignment.user_id = rm_users.id
-    LEFT JOIN rm_pp ON rm_mgr_assignment.assignable_id = rm_pp.id
+	su.email AS consultant_email,
+	su.display_name AS consultant,
+	cal.date AS engagement_date,
+	sp.name AS planned,
+	-- sp.client AS client, -- We'd probably rather pull this from HubSpot
+	sp.project_code,
+	sp.project_state AS engagement_status,
+	SPLIT(sp.project_code, ' | ')[0]::STRING AS hubspot_deal_id,
+	SPLIT(sp.project_code, ' | ')[1]::STRING AS hubspot_line_item,
+	COALESCE(sa.hours_per_day, 8) AS hours, -- Default to 8
+	sa.description AS rm_assignment_description
+    FROM planning_calendar cal
+    JOIN rm_users su ON LOWER(SPLIT(su.email, '@')[0]::string) = LOWER(SPLIT(cal.email_address, '@')[0]::string) 
+    LEFT JOIN  rm_mgr_assignment sa
+        ON cal.date >= sa.starts_at AND cal.date <= sa.ends_at
+        AND sa.user_id = su.id
+    LEFT JOIN rm_pp sp ON sa.assignable_id = sp.id
 ),
 
 hubspot_deal as (
@@ -66,15 +67,13 @@ hubspot_deal_company as (
 ), -- join on deal id
 
 hubspot_li as (
-    select
-    id,
-    deal_id, 
+    select deal_id,
     property_name,
-    min(property_price) as bill_rate,
-    ((SUM(property_quantity * COALESCE(property_product_hours,1)))/8) AS line_item_num_days
+    ((SUM(property_quantity * COALESCE(property_product_hours,1)))/8) AS line_item_num_days,
+    min(property_price) as bill_rate 
     from {{ref('stg_line_item')}}
     where (property_sub_category = 'Consulting' OR property_sub_category = 'Training')
-    group by 1,2,3
+    group by 1,2
 ),
 
 dim_company as (
@@ -93,6 +92,30 @@ dim_people as (
     select member_email
     from {{ref('dim_people')}}
 ),
+responses as (
+    select hub_spot_line_item,
+    TO_VARCHAR(CONVERT_TIMEZONE('Europe/Warsaw', 'UTC',TO_TIMESTAMP(created,'DD/MM/YYYY hh24:mi')), 'YYYY-MM-DDThh:mi:ssZ') as created,
+    comments_add_information
+    from {{ref('stg_request_form_responses')}}
+),
+
+latest_responses as (
+    select rq.hub_spot_line_item, rq.created as request_created, rq.comments_add_information as request_comments
+    from responses rq
+    join ( -- determine most recent request in case there is more than one request per line item (unlikely but possible)
+        select hub_spot_line_item, max(created) as created_max
+        from responses
+        group by 1
+        limit 1
+        ) rq_most_recent
+        where rq.hub_spot_line_item = rq_most_recent.hub_spot_line_item and rq.created = rq_most_recent.created_max
+),
+orrf as (
+    select hub_spot_line_item,
+    TO_VARCHAR(CONVERT_TIMEZONE('Europe/Warsaw', 'UTC',TO_TIMESTAMP(created,'DD/MM/YYYY hh24:mi')), 'YYYY-MM-DDThh:mi:ssZ') as created,
+    comments_add_information
+    from {{ref('stg_request_form_responses')}}
+),
 
 final as (
     select
@@ -106,7 +129,10 @@ final as (
     dc.id as planned_company_id,
     -- below to be split into dimension
     pc.engagement_status,
-    pc.planned
+    pc.planned,
+    pc.rm_assignment_description as "Rm Assignment Description",
+    rq.request_created as "Request Created",
+    rq.request_comments as "Request Comments"
     -- add deal owner id
     -- add deal team id
     FROM planning_clean pc
@@ -120,6 +146,17 @@ final as (
     LEFT JOIN dim_company dc on dc.id = hdc.company_id
     -- get our people id & join to our dimension
     LEFT JOIN dim_people dp on lower(split(pc.consultant_email, '@')[0]::string) = lower(split(dp.member_email, '@')[0]::string)
+    LEFT JOIN (
+        SELECT rq.hub_spot_line_item, rq.created AS request_created, rq.comments_add_information AS request_comments
+        FROM orrf rq
+            JOIN ( -- Determine most recent request in case there is more than one request per line item (unlikely but possible)
+                SELECT hub_spot_line_item, MAX(created) AS created_max
+                FROM orrf
+                GROUP BY 1
+                LIMIT 1
+            ) rq_most_recent
+        WHERE rq.hub_spot_line_item = rq_most_recent.hub_spot_line_item AND rq.created = rq_most_recent.created_max
+    ) rq ON pc.project_code = rq.hub_spot_line_item
 )
 
 select * from final
