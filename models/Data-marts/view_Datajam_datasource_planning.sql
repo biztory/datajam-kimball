@@ -14,6 +14,10 @@ dim_deal as (
     select * from {{ref('dim_deal')}}
 ),
 
+dim_engagment as (
+    select * from {{ref('dim_engagement')}}
+),
+
 final as (
     select
     dp.member_name as "Consultant",
@@ -42,6 +46,9 @@ final as (
     fct.planned_deal_id as "Planned Deal Id",
     dd.deal_owner as "Planned Deal Owner",
     fct.project_code as "Project Code",
+    de.request_comments as "Request Comments",
+    de.request_created as "Request Created",
+    de.rm_assignment_description as "Rm Assignment Description",
     fct.bill_rate as "Bill Rate",
     fct.hours as "Hours",
     fct.line_item_num_days as "Line Item Num Days"
@@ -49,5 +56,6 @@ final as (
     LEFT JOIN dim_people dp on LOWER(SPLIT(dp.member_email, '@')[0]::string) = LOWER(SPLIT(fct.consultant_email, '@')[0]::string)
     LEFT JOIN dim_company dc on fct.planned_company_id = dc.id
     LEFT JOIN dim_deal dd on fct.planned_deal_id = dd.deal_id
+    LEFT JOIN dim_engagement de on fct.project_code = fct.project_code
 )
 select * from final
