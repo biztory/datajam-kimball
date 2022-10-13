@@ -33,7 +33,7 @@ final as (
     dp.member_status as "Consultant Status",
     dp.member_team as "Consultant Team",
     fct.engagement_date as "Engagement Date",
-    ifnull(fct.engagement_status,'Free') in  as "Engagement Status",
+    ifnull(fct.engagement_status,'Free') as "Engagement Status",
     fct.planned as "Planned",
     dc.property_biztory_shortcode as "Planned Biztory Shortcode",
     COALESCE(dc.property_address,dc.property_address_2,'unknown') as "Planned Company Address",
