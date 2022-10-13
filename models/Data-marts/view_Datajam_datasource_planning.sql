@@ -33,7 +33,7 @@ final as (
     dp.member_status as "Consultant Status",
     dp.member_team as "Consultant Team",
     fct.engagement_date as "Engagement Date",
-    fct.engagement_status as "Engagement Status",
+    ifnull(fct.engagement_status,'Free') in  as "Engagement Status",
     fct.planned as "Planned",
     dc.property_biztory_shortcode as "Planned Biztory Shortcode",
     COALESCE(dc.property_address,dc.property_address_2,'unknown') as "Planned Company Address",
@@ -56,6 +56,5 @@ final as (
     LEFT JOIN dim_people dp on LOWER(SPLIT(dp.member_email, '@')[0]::string) = LOWER(SPLIT(fct.consultant_email, '@')[0]::string)
     LEFT JOIN dim_company dc on fct.planned_company_id = dc.id
     LEFT JOIN dim_deal dd on fct.planned_deal_id = dd.deal_id
-    
 )
 select * from final
